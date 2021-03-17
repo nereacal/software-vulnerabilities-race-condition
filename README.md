@@ -10,8 +10,8 @@ Occurs when more than 1 process access to the same resource. Results for each pr
 Those synchronisation mechanisms should be set in critical sections (this is the part of the code execute by multiple threads over the shared resource).
 
 2. File Systems
-- Uses name of file: Will occur when it is used the name of the file (identifies the file by its name) instead of the handler of the file (identifies the file internally) or verifying the file property.
-- Verfication time (TOCTOU): Given File1 (with Handler H1) and File2 (with Handler H2). If content in File1 is modified the verification of permission will be made on the file name (File1), however if an attacker changes the handler (File2 - H1) the modified file will be (unwanted) File2.
+- Verfication time (TOCTOU): Will occur when it is used the name of the file (identifies the file by its name) instead of the handler of the file (identifies the file internally) or verifying the file property.
+Given File1 (with Handler H1) and File2 (with Handler H2). If content in File1 is modified the verification of permission will be made on the file name (File1), however if an attacker changes the handler (File2 - H1) the modified file will be (unwanted) File2. To prevent this, the function ```open(file, O_CREAT | O_EXCL)``` will verify if the file is created, create it or generate error.
 
 
 Vulnerabilities will be programs written in C. First needed is a C compiler in any OS.
@@ -33,4 +33,7 @@ If a program that uses threads is going to be executed then compilance should be
 ``` ./nameCompiledFile ```
 
 ### Use:
-
+Example_race_condition.c program in C creates 70 threads and each one calls a function to increase a shared variable.
+Compiling the file and executing it several times will give different solutions.
+Example_race_condition_mutex.c program has synchronisation mechanism ```mutex_``` in the critical section (shared variable). 
+Compiling the file and executing it several times will give the same solutions.
